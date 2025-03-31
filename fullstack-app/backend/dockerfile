@@ -1,0 +1,15 @@
+# Python image'ını kullanıyoruz
+FROM python:3.9
+
+# Çalışma dizinini belirliyoruz
+WORKDIR /app
+
+# requirements.txt dosyasını kopyalayıp bağımlılıkları kuruyoruz
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Flask API'yi kopyalıyoruz
+COPY . .
+
+# Flask API'yi başlatıyoruz
+CMD ["python", "app.py"]

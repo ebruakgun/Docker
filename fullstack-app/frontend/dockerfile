@@ -1,0 +1,17 @@
+# Node image'ını kullanıyoruz
+FROM node:16
+
+# Çalışma dizinini belirliyoruz
+WORKDIR /app
+
+# package.json ve package-lock.json dosyalarını kopyalıyoruz
+COPY package*.json ./
+
+# Bağımlılıkları kuruyoruz
+RUN npm install
+
+# React kaynak dosyalarını kopyalıyoruz
+COPY . .
+
+# React uygulamasını başlatıyoruz
+CMD ["npm", "start"]
