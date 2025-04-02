@@ -1,15 +1,19 @@
-# Python image'ını kullanıyoruz
-FROM python:3.9
+# Python'ı baz alarak bir Docker image'ı oluşturuyoruz
+FROM python:3.9-slim
 
-# Çalışma dizinini belirliyoruz
+# Çalışma dizinini belirleyelim
 WORKDIR /app
 
-# requirements.txt dosyasını kopyalayıp bağımlılıkları kuruyoruz
-COPY requirements.txt .
+# Gereksinimlerinizi kopyalayın ve yükleyin
+COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 
-# Flask API'yi kopyalıyoruz
-COPY . .
+# Wait-for-it scriptini ve uygulamanızı kopyalayın
+COPY wait-for-it.sh /app/
+COPY . /app/
 
-# Flask API'yi başlatıyoruz
-CMD ["python", "app.py"]
+# Wait-for-it scriptine çalıştırma izni verin
+RUN chmod +x /app/wait-for-it.sh
+
+# Uygulamanızı başlatmadan önce DB hazır olana kadar bekle
+CMD ./wait-for-it.sh db:5432 -- python app.py
